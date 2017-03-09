@@ -1,4 +1,4 @@
-package %w(keepalived htop ssmtp)
+package %w(keepalived htop)
 service = 'keepalived'
 
 slave = node['hostname'].include? 'slave'
