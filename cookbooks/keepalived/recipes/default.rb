@@ -19,18 +19,20 @@ cookbook_file '/etc/keepalived/transition.sh' do
 end
 
 template '/etc/keepalived/ips.conf' do
-    source  'ips.conf.erb'
-    owner   'root'
-    group   'root'
-    mode    '0664'
+    cookbook 'keepalived'
+    source   'ips.conf.erb'
+    owner    'root'
+    group    'root'
+    mode     '0664'
     notifies :restart, "service[#{service}]", :delayed
 end
 
 template '/etc/keepalived/keepalived.conf' do
-    source  'keepalived.conf.erb'
-    owner   'root'
-    group   'root'
-    mode    '0664'
+    cookbook 'keepalived'
+    source   'keepalived.conf.erb'
+    owner    'root'
+    group    'root'
+    mode     '0664'
     notifies :restart, "service[#{service}]", :delayed
 end
 

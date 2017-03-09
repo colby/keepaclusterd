@@ -2,6 +2,7 @@ global_defs {
 }
 
 vrrp_instance production {
+  # Vagrant shared interface
   interface enp0s8
 
   # Start-up default state; prevents triggering of elections
