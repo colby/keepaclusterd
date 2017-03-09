@@ -2,13 +2,9 @@
 # vi: set ft=ruby :
 
 Vagrant.configure(2) do |config|
-  if Vagrant.has_plugin?("vagrant-cachier")
-    config.cache.scope = :box
-  end
-
   config.vm.provider "virtualbox" do |v|
     v.memory = 2024
-    v.cpus = 2
+    v.cpus   = 2
   end
 
   #config.vm.box = "ubuntu/trusty64"
