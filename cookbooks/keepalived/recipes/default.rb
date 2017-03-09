@@ -1,14 +1,6 @@
 package %w(keepalived htop)
 service = 'keepalived'
 
-slave = node['hostname'].include? 'slave'
-
-if slave
-    priority = node['hostname'][-1].to_i * 100
-else
-    priority = 100
-end
-
 cookbook_file '/etc/keepalived/transition.sh' do
     cookbook 'keepalived'
     source   'transition.sh'

@@ -1,26 +1,26 @@
-global_defs {
-}
-
 vrrp_instance production {
-  # Vagrant shared interface
-  interface enp0s8
+    # Vagrant shared interface
+    interface enp0s8
 
-  # Start-up default state; prevents triggering of elections
-  state BACKUP
+    # Start-up default state; prevents triggering of elections
+    state BACKUP
 
-  # VRRP VRID
-  virtual_router_id 1
+    # VRRP VRID
+    virtual_router_id 1
 
-  # equal priority between nodes will reduce contention
-  priority 10
+    # VRRP IPs
+    include /etc/keepalived/ips.conf
 
-  # VRRP Advert interval (use default)
-  advert_int 1
+    # Equal priority between nodes will reduce contention
+    # NOTE: priority value required but ignored due to nopreempt
+    priority 10
 
-  # Override VRRP RFC preemption default
-  # prevents failovers from happening due to host reboots
-  nopreempt
+    # VRRP Advert interval (use default)
+    advert_int 1
 
-  notify /etc/keepalived/transition.sh
-  include /etc/keepalived/ips.conf
+    # Prevents failovers from happening due to host reboots
+    nopreempt
+
+    # Script to run on state transition
+    notify /etc/keepalived/transition.sh
 }
