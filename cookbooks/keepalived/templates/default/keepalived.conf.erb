@@ -11,8 +11,8 @@ vrrp_script check_sanity {
 }
 
 vrrp_instance production {
-  # Binding interface; SoftLayer uses eth1 for public networking
-  interface eth1
+  interface enp0s8
+
   # Start-up default state; prevents triggering of elections
   state BACKUP
   # VRRP VRID
