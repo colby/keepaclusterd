@@ -1,0 +1,41 @@
+global_defs {
+}
+
+vrrp_script check_sanity {
+  # NOTE: this script should return 0, anything else results in a FAULT state
+  # which will prohibit host from being MASTER
+  script       "/etc/keepalived/sanitycheck.sh"
+  interval 2   # check every 2 seconds
+  fall 2       # require 2 failures for KO
+  rise 2       # require 2 successes for OK
+}
+
+vrrp_instance production {
+  # Binding interface; SoftLayer uses eth1 for public networking
+  interface eth1
+  # Start-up default state; prevents triggering of elections
+  state BACKUP
+  # VRRP VRID
+  virtual_router_id 13
+  # VRRP PRIO
+  # equal priority between nodes will reduce contention
+  priority 10
+  # VRRP Advert interval (use default)
+  advert_int 1
+  # Override VRRP RFC preemption default
+  # prevents failovers from happening due to host reboots
+  nopreempt
+  preempt_delay 6
+  #track_script {
+  #  check_sanity
+  #}
+
+  notify_master "/etc/keepalived/transition.sh master"
+  notify_backup "/etc/keepalived/transition.sh backup"
+  notify_fault "/etc/keepalived/transition.sh fault"
+  notify_stop "/etc/keepalived/transition.sh stopping"
+  # general purpose notification not used (argument order differs from implementation)
+  # notify "/etc/keepalived/transition.sh"
+
+  include ips.conf
+}
