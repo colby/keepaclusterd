@@ -1,37 +1,21 @@
 #!/bin/bash
 
-# arg 1 is the event name
-# possible values: stopping, backup, master, failed
+# arguments
+# $1 = "GROUP"|"INSTANCE"
+# $2 = name of group or instance
+# $3 = target state of transition
+#     ("MASTER"|"BACKUP"|"FAULT")
 
-to_addr="colbyo@copiousinc.com"
-from_addr="$(whoami)@$(hostname --fqdn)"
-msg_subject="[keepalived] $(hostname) transitioned to ${1} state"
-
-ssmtp colbyo@copiousinc.com <<HEREDOC
-To: ${to_addr}
-From: ${from_addr}
-Subject: ${msg_subject}
-
-${msg_subject}
-HEREDOC
-
-# check for election to master
-# if this node becomes master and nginx is not successfully listening on IPs then the site goes down!
-if [[ $1 == *"master"* ]]
-then
-  # brief pause to let keepalived bind to all public production VIPs
-  sleep 4
-  # check for nginx process status
-  sudo service nginx status | grep -F 'is running'
-  rc=$?
-  if [ $rc -eq 0 ]
-  then
-    # nginx is running; try to restart it (if the configurations look okay)
-    sudo service nginx configtest && sudo service nginx restart
-  else
-    # nginx is not running; command it to start
-    sudo service nginx start
-  fi
-fi
+case $3 in
+    'MASTER')
+        # NOTE: wait for VIP creation
+        wait 5
+        # NOTE: start nginx
+        service nginx configtest && service nginx start
+    ;;
+    'BACKUP'|'FAULT')
+        service nginx stop
+    ;;
+esac
 
 exit 0
