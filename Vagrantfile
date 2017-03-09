@@ -16,7 +16,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "chef_solo" do |chef|
     chef.add_recipe "keepalived"
-    #chef.add_recipe "nginx"
+    chef.add_recipe "nginx"
   end
 
   config.vm.define "master", primary: true do |n|
