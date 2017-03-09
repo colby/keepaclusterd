@@ -11,4 +11,7 @@ end
 
 service service do
     action [:enable, :start]
+    # NOTE: if a node is not keepalived master, nginx will fail on binding to
+    # the VIP
+    ignore_failure true
 end
