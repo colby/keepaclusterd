@@ -1,13 +1,6 @@
 global_defs {
 }
 
-vrrp_script check_sanity {
-  script       "/etc/keepalived/sanitycheck.sh"
-  interval 2   # check every 2 seconds
-  fall 2       # require 2 failures for KO
-  rise 2       # require 2 successes for OK
-}
-
 vrrp_instance production {
   interface enp0s8
 
@@ -27,10 +20,6 @@ vrrp_instance production {
   # prevents failovers from happening due to host reboots
   nopreempt
   preempt_delay 6
-
-  #track_script {
-  #  check_sanity
-  #}
 
   notify_master "/etc/keepalived/transition.sh master"
   notify_backup "/etc/keepalived/transition.sh backup"

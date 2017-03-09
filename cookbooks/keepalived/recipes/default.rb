@@ -10,19 +10,12 @@ else
 end
 
 cookbook_file '/etc/keepalived/transition.sh' do
-    source  'transition.sh'
-    owner   'root'
-    group   'root'
-    mode    '0774'
-    action  :create
-end
-
-cookbook_file '/etc/keepalived/sanitycheck.sh' do
-    source  'sanitycheck.sh'
-    owner   'root'
-    group   'root'
-    mode    '0774'
-    action  :create
+    cookbook 'keepalived'
+    source   'transition.sh'
+    owner    'root'
+    group    'root'
+    mode     '0774'
+    action   :create
 end
 
 template '/etc/keepalived/ips.conf' do
